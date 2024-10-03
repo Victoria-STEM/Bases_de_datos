@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE peliculas [
+    <!ELEMENT peliculas (pelicula*)>
+    <!ELEMENT pelicula (titulo, director, ano, duracion?)>
+    <!ELEMENT titulo (#PCDATA)>
+    <!ELEMENT director (#PCDATA)>
+    <!ELEMENT ano (#PCDATA)>
+    <!ELEMENT duracion (#PCDATA)>
+    <!ATTLIST pelicula categoria CDATA #IMPLIED>
+]>
+<peliculas>
+    
+    <pelicula categoria="Ciencia Ficcion">
+        <titulo>Matrix</titulo>
+        <director>Lana Wachoski, Lilly Wachoski</director>
+        <ano>1999</ano>
+        <duracion>136</duracion>
+    </pelicula>
+
+    <pelicula>
+        <titulo>Alien</titulo>
+        <director>Ridley Scott</director>
+        <ano>1999</ano>
+        <duracion>90</duracion>
+    </pelicula>
+
+    <pelicula>
+        <titulo>Dune</titulo>
+        <director>Denis Villnueve</director>
+        <ano>2023</ano>
+        <duracion>200</duracion>
+    </pelicula>
+
+</peliculas>

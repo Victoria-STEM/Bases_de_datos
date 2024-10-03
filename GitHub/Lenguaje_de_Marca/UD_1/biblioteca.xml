@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE biblioteca [
+    <!ELEMENT biblioteca (libro+)>
+    <!ELEMENT libro (nombre, autor*, fechaPublicacion?)>
+    <!ELEMENT fechaPublicacion (dia, mes, ano)>
+
+    <!ELEMENT nombre (#PCDATA)>
+    <!ELEMENT autor (#PCDATA)>
+    <!ELEMENT dia (#PCDATA)>
+    <!ELEMENT mes (#PCDATA)>
+    <!ELEMENT ano (#PCDATA)>
+]>
+
+<biblioteca>
+
+    <libro>
+        <nombre>Los propios dioses</nombre>
+        <autor>Isaac Asimov</autor>
+        <fechaPublicacion>
+            <dia>17</dia>
+            <mes>Julio</mes>
+            <ano>1980</ano>
+        </fechaPublicacion>
+    </libro>
+
+    <libro>
+        <nombre>Buenos presagios</nombre>
+        <autor>Terry Pratchet</autor>
+        <autor>Neil Gaiman</autor>
+    </libro>
+
+</biblioteca>

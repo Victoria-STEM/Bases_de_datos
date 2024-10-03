@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE Carta [
+    <!ELEMENT Carta (plato+)>
+    <!ELEMENT plato (nombre, descripcion, alergenos*, ingrediente+)>
+    <!ELEMENT ingrediente (nombreIngrediente, cantidad, unidadMedida)>
+
+    <!ELEMENT nombre (#PCDATA)>
+    <!ELEMENT descripcion (#PCDATA)>
+    <!ELEMENT alergenos (#PCDATA)>
+    <!ELEMENT nombreIngrediente (#PCDATA)>
+    <!ELEMENT cantidad (#PCDATA)>
+    <!ELEMENT unidadMedida (#PCDATA)>
+
+    <!ATTLIST plato tipo CDATA #IMPLIED>
+]>
+
+<Carta>
+
+    <plato>
+        <nombre>Lasanha</nombre>
+        <descripcion>Sabrosisimas capas de pasta rellena</descripcion>
+        <alergenos>huevos, leche</alergenos>
+        <ingrediente>
+            <nombreIngrediente>tomate</nombreIngrediente>
+            <cantidad>2</cantidad>
+            <unidadMedida>100g</unidadMedida>
+        </ingrediente>
+        <ingrediente>
+            <nombreIngrediente>pasta</nombreIngrediente>
+            <cantidad>3</cantidad>
+            <unidadMedida>200g</unidadMedida>
+        </ingrediente>
+    </plato>
+
+    <plato tipo="vegetariano">
+        <nombre>Huevo frito</nombre>
+        <descripcion>Huevo de gallina frito en sarten.</descripcion>
+        <alergenos>huevo</alergenos>
+        <ingrediente>
+            <nombreIngrediente>huevo</nombreIngrediente>
+            <cantidad>1</cantidad>
+            <unidadMedida>100g</unidadMedida>
+        </ingrediente>
+    </plato>
+
+</Carta>
