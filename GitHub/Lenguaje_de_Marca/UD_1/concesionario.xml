@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE concesionario [
+    <!ELEMENT concesionario (coche+)>
+    <!ELEMENT coche (marca, modelo, numeroPuertas, plazas, listaExtras+, electrico?, automatico?)>
+    <!ELEMENT listaExtras (extra?)>
+    <!ELEMENT extra (nombre, descripcion?, precio)>
+
+    <!ELEMENT electrico EMPTY>
+    <!ELEMENT automatico EMPTY>
+
+    <!ELEMENT marca (#PCDATA)>
+    <!ELEMENT modelo (#PCDATA)>
+    <!ELEMENT numeroPuertas (#PCDATA)>
+    <!ELEMENT plazas (#PCDATA)>
+    <!ELEMENT nombre (#PCDATA)>
+    <!ELEMENT descripcion (#PCDATA)>
+    <!ELEMENT precio (#PCDATA)>
+
+    <!ATTLIST coche color CDATA #REQUIRED>
+
+    ]>
+
+
+<concesionario>
+
+    <coche color = "rojo">
+        <marca>Porche</marca>
+        <modelo>211</modelo>
+        <numeroPuertas>2</numeroPuertas>
+        <plazas>4</plazas>
+        <listaExtras>
+            <extra>
+                <nombre>faros</nombre>
+                <precio>2000</precio>
+            </extra>
+        </listaExtras>
+        <electrico />
+        <automatico />
+    </coche>
+
+    <coche color = "amarillo">
+        <marca>Citroen</marca>
+        <modelo>Fiesta</modelo>
+        <numeroPuertas>5</numeroPuertas>
+        <plazas>5</plazas>
+        <listaExtras>
+        </listaExtras>
+    </coche>
+
+</concesionario>

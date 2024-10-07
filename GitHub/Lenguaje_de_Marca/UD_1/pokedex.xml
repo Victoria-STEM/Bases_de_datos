@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE pokedex [
+    <!ELEMENT pokedex (pokemon+)>
+    <!ELEMENT pokemon (name, types, abilities, baseStats, experience, legendary?)>
+    <!ELEMENT name (#PCDATA)>
+    <!ELEMENT types (type+)>
+    <!ELEMENT type (#PCDATA)>
+    <!ELEMENT abilities (ability+)>
+    <!ELEMENT ability (#PCDATA)>
+    <!ELEMENT baseStats (HP, ATK, DEF)>
+    <!ELEMENT HP (#PCDATA)>
+    <!ELEMENT ATK (#PCDATA)>
+    <!ELEMENT DEF (#PCDATA)>
+    <!ELEMENT experience (#PCDATA)>
+    <!ELEMENT legendary EMPTY>
+]>
+
+<pokedex>
+
+    <pokemon>
+        <name>Miwtwo</name>
+        <types>
+            <type>Psychic</type>
+        </types>
+        <abilities>
+            <ability>Mind reading</ability>
+        </abilities>
+        <baseStats>
+            <HP>20000</HP>
+            <ATK>2500</ATK>
+            <DEF>3000</DEF>
+        </baseStats>
+        <experience>8000</experience>
+    </pokemon>
+
+    <pokemon>
+        <name>Charizar</name>
+        <types>
+            <type>Fire</type>
+            <type>Wind</type>
+        </types>
+        <abilities>
+            <ability>Fire ball</ability>
+            <ability>Scream</ability>
+            <ability>Push Pull</ability>
+        </abilities>
+        <baseStats>
+            <HP>865</HP>
+            <ATK>256</ATK>
+            <DEF>954</DEF>
+        </baseStats>
+        <experience>500</experience>
+    </pokemon>
+
+</pokedex>
