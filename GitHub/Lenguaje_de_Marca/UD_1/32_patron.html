@@ -1,0 +1,25 @@
+<script>
+
+    let filas = prompt("Introduce un numero de filas: ")
+    filas = Number(filas)
+
+    let columnas = prompt("Introduce un numero de columnas: ")
+    columnas = Number(columnas)
+
+    console.log("Ha introducido " + filas + " filas y " + columnas + " columnas.")
+
+    let dibujoIzquierda = "x-"
+    let espacios = ""
+
+    for (let i = 0; i < columnas; i++) {
+        espacios += dibujoIzquierda
+    }
+
+    for (let j = 0; j < filas; j++) {
+        console.log("dentro del segundo for " + espacios + "x")
+        
+    }
+
+    console.log("fuera del bucle.")
+
+</script>
