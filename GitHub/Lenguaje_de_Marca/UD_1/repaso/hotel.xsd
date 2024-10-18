@@ -53,7 +53,7 @@
                             <xs:element name="idHuesped">
                                 <xs:simpleType>
                                     <xs:restriction base="xs:string">
-                                        <xs:pattern value="HUESPED-[0-9]{4}"/>
+                                        <xs:pattern value="[HUESPED]-[0-9]{4}"/>
                                     </xs:restriction>
                                 </xs:simpleType>
                             </xs:element>
