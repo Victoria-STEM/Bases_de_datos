@@ -1,6 +1,0 @@
-<!ELEMENT pelicula (titulo, director, ano, duracion?)>
-<!ELEMENT titulo (#PCDATA)>
-<!ELEMENT director (#PCDATA)>
-<!ELEMENT ano (#PCDATA)>
-<!ELEMENT duracion (#PCDATA)>
-<!ATTLIST pelicula categoria CDATA #IMPLIED>
