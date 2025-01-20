@@ -57,7 +57,7 @@ insert into ventas values
 -- Relación de ejercicios prácticos
 
 -- 1. Encuentra el número total de empleados por departamento.
-SELECT COUNT(*) as 'numero_empleados'
+SELECT COUNT(*) as 'Numero Empleados'
 FROM empleados;
 
 -- 2. Calcula el salario promedio por ciudad, 
@@ -67,7 +67,7 @@ SELECT
     AVG(salario) AS salario_promedio
 FROM empleados
 GROUP BY ciudad
-HAVING AVG(salario) > 3000;
+HAVING AVG(salario) > 4000;
 
 -- 3. Encuentra el total de ventas por cada cliente.
 SELECT
@@ -79,10 +79,10 @@ GROUP BY cliente;
 -- 4. Muestra los departamentos con más de 3 empleados.
 SELECT 
     departamento,
-    SUM(id) as numero_empleados
+    COUNT(*) as numero_empleados
 FROM empleados
 GROUP BY departamento
-HAVING SUM(id) > 3;
+HAVING COUNT(*) >= 3;
 
 -- 5. Calcula el promedio de edad de los empleados por ciudad.
 SELECT
