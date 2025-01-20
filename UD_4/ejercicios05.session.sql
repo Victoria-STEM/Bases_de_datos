@@ -77,9 +77,9 @@ insert into ventas values
 -- 2. Lista los nombres de empleados que trabajan en departamentos existentes 
 -- en la tabla departamentos.
 SELECT
-    nombre,
+    nombre
 FROM empleados
-where nombre_departamento IN (SELECT nombre_departamento FROM departamentos);
+where departamento IN (SELECT nombre FROM departamento);
 
 -- 3. Encuentra todos los empleados cuyo salario sea mayor a 4000 y muestra su nombre y salario.
 select 
@@ -97,16 +97,20 @@ where salario = (SELECT max(salario) as salario_maximo from empleados);
 
 -- 5. Calcula el promedio de salarios por departamento y 
 -- muestra los departamentos con un salario promedio mayor a 5000.
-select
-    departamento,
-    avg(salario) as salario_promedio
-from empleados
-GROUP BY departamento
-having avg(salario) > 5000;
+SELECT subconsulta_promedios.departamento, subconsulta_promedios.salario_promedio
+FROM (
+    SELECT
+        departamento,
+        avg(salario) as salario_promedio
+    FROM empleados
+    GROUP BY departamento) AS subconsulta_promedios
+    WHERE subconsulta_promedios.salario_promedio > 5000;
 
 -- 6. Encuentra los clientes que han realizado ventas superiores al promedio de todas las ventas.
+Select avg(importe) as promedio_ventas from ventas;
+
 select
     cliente,
-    importe
+    importe,
 from ventas
 where importe > (Select avg(importe) as promedio_ventas from ventas);
