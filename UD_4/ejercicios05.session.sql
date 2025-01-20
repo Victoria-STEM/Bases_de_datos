@@ -1,3 +1,4 @@
+
 -- Elimina la base de datos si ya existe
 drop database if exists nevadashopping;
 
@@ -30,6 +31,20 @@ insert into empleados values
 (11, 'Laura', 'Marketing', 4500.00, 'Madrid', 35),
 (12, 'Carlos', 'Desarrollo', 3200.00, 'Barcelona', 28);
 
+-- Tabla departamentos
+create table departamentos (
+    id int primary key,
+    nombre varchar(50)
+);
+
+-- Inserta datos en la tabla departamentos
+insert into departamentos values
+(1, 'IT'),
+(2, 'Ventas'),
+(3, 'Marketing'),
+(4, 'Recursos Humanos'),
+(5, 'Desarrollo');
+
 -- Tabla ventas
 create table ventas (
     id int primary key,
@@ -52,73 +67,46 @@ insert into ventas values
 (9, 9, 'Cliente I', 3300.00, '2024-01-18'),
 (10, 10, 'Cliente J', 4700.00, '2024-01-19'),
 (11, 1, 'Cliente K', 1500.00, '2024-01-20'),
-(12, 2, 'Cliente L', 1800.00, '2024-01-21');
+(12, 2, 'Cliente L', 1800.00, '2024-01-21'),
+(13, 2, 'Cliente L', 1800.00, '2024-01-21');
 
--- Relación de ejercicios prácticos
+-- Ejercicios de Subconsultas
 
--- 1. Encuentra el número total de empleados por departamento.
-SELECT COUNT(*) as 'Numero Empleados'
-FROM empleados;
+-- 1. Encuentra empleados cuyo salario sea mayor al promedio de todos los salarios.
 
--- 2. Calcula el salario promedio por ciudad, 
--- mostrando solo las ciudades con un salario promedio mayor a 4000.
+-- 2. Lista los nombres de empleados que trabajan en departamentos existentes 
+-- en la tabla departamentos.
 SELECT
-    ciudad,
-    AVG(salario) AS salario_promedio
+    nombre,
 FROM empleados
-GROUP BY ciudad
-HAVING AVG(salario) > 4000;
+where nombre_departamento IN (SELECT nombre_departamento FROM departamentos);
 
--- 3. Encuentra el total de ventas por cada cliente.
-SELECT
-    cliente,
-    SUM(importe) as total_ventas
-FROM ventas 
-GROUP BY cliente;
+-- 3. Encuentra todos los empleados cuyo salario sea mayor a 4000 y muestra su nombre y salario.
+select 
+    nombre,
+    salario
+from EMPLEADOS
+where salario > 4000;
 
--- 4. Muestra los departamentos con más de 3 empleados.
-SELECT 
+-- 4. Encuentra el nombre del empleado con el salario más alto.
+select
+    nombre,
+    salario
+from empleados
+where salario = (SELECT max(salario) as salario_maximo from empleados);
+
+-- 5. Calcula el promedio de salarios por departamento y 
+-- muestra los departamentos con un salario promedio mayor a 5000.
+select
     departamento,
-    COUNT(*) as numero_empleados
-FROM empleados
+    avg(salario) as salario_promedio
+from empleados
 GROUP BY departamento
-HAVING COUNT(*) >= 3;
+having avg(salario) > 5000;
 
--- 5. Calcula el promedio de edad de los empleados por ciudad.
-SELECT
-    ciudad,
-    AVG(edad) as promedio_edad
-FROM empleados
-GROUP BY ciudad;
-
--- 6. Muestra las ciudades en las que hay empleados, sin duplicados.
-SELECT DISTINCT ciudad
-FROM empleados;
-
--- 7. Muestra el número total de ventas y la suma total de importes.
-SELECT
-    COUNT(*) AS total_ventas,
-    SUM(importe) AS total_importes
-FROM ventas;
-
--- 8. Encuentra el cliente con la venta más baja.
-SELECT
+-- 6. Encuentra los clientes que han realizado ventas superiores al promedio de todas las ventas.
+select
     cliente,
     importe
-FROM ventas
-WHERE importe = (SELECT MIN(importe) AS importe_minimo FROM ventas);
-
--- 9. Encuentra el cliente que realizó la venta de mayor importe.
-SELECT
-    cliente,
-    importe AS 'Venta Máxima'
-FROM ventas
-WHERE importe = (SELECT MAX(importe) AS importe_maximo FROM ventas);
-
--- 10. Encuentra los empleados con un salario mayor al promedio de todos los salarios.
-SELECT DISTINCT
-    nombre,
-    salario,
-    (SELECT AVG(salario) FROM empleados) AS salario_promedio
-FROM empleados
-WHERE salario > (SELECT AVG(salario) FROM empleados);
+from ventas
+where importe > (Select avg(importe) as promedio_ventas from ventas);
