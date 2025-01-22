@@ -88,8 +88,9 @@ from ciudadano;
 
 -- 8. Obtener el entero más cercano hacia abajo y hacia arriba de los presupuestos de los ministerios.
 SELECT 
-    nombre (select FLOOR(MAX(presupuesto)) as presupuesto maximo from ministerio),
-    nombre (select CEIL(MIN(presupuesto)) as presupuesto minimo from ministerio)
+    nombre,
+    FLOOR(presupuesto) as presupuesto_maximo,
+    CEILING(presupuesto) as presupuesto_minimo
 from ministerio;
 
 -- 9. Generar un número aleatorio para asignar un identificador único temporal a cada actividad.
@@ -100,18 +101,21 @@ from actividad;
 -- Ejercicios de Funciones de Fecha y Hora
 
 -- 10. Calcular la antigüedad de cada ministerio en años.
-SELECT DATEDIFF(NOW(), fecha_creacion) as antiguedad_dias from ministerio; 
+SELECT 
+    nombre,
+    extract(YEAR from NOW()) - extract(YEAR from fecha_creacion)
+from ministerio; 
 
 -- 11. Formatear las fechas de inicio y fin de las actividades en formato "DD-MM-YYYY".
 SELECT 
-    DATE_FORMAT(fecha_inicio, '%d/%m/%Y') as fecha_inicio,
-    DATE_FORMAT(fecha_fin, '%d/%m/%Y') as fecha_fin 
+    DATE_FORMAT(fecha_inicio, '%d-%m-%Y') as fecha_inicio,
+    DATE_FORMAT(fecha_fin, '%d-%m-%Y') as fecha_fin 
 from actividad;
 
 -- 12. Calcular cuántos días faltan para que termine cada actividad.
 SELECT
     id,
-    datediff(now(), fecha_fin) as dias_falta_termine_actividad
+    datediff(fecha_fin, now()) as dias_falta_termine_actividad
 FROM actividad;
 
 -- 13. Extraer el mes y el año de las fechas de nacimiento de los ciudadanos.
@@ -126,7 +130,7 @@ SELECT
     nombre,
     fecha_nacimiento
 from ciudadano
-where fecha_nacimiento > '1990-01-01';
+where YEAR(fecha_nacimiento) > 1990;
 
 -- 15. Calcular el tiempo total en días que dura cada actividad gubernamental.
 SELECT
