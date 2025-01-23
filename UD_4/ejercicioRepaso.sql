@@ -136,86 +136,105 @@ SELECT nombre, antiguedad
 FROM hermandad
 WHERE antiguedad < 1600;
 
--- 13. Seleccionar las procesiones que comienzan después de las 19:00 y están en el barrio 'Realejo'.
+-- 13. Seleccionar las procesiones que comienzan después 
+-- de las 19:00 y están en el barrio 'Realejo'.
+SELECT nombre 
+FROM procesion
+WHERE hora_inicio > '19:00:00' AND barrio = 'Realejo';
+
+-- 14. Listar las hermandades que tienen más de 80 costaleros 
+-- o fueron fundadas después de 1900.
 SELECT 
-
-
--- 14. Listar las hermandades que tienen más de 80 costaleros o fueron fundadas después de 1900.
-
--- RESPUESTA:
-
-
+    nombre,
+    numero_costaleros,
+    antiguedad
+FROM hermandad
+WHERE numero_costaleros > 80 OR antiguedad > 1900;
 
 -- 15. Mostrar las procesiones que no se realizan el Domingo de Ramos.
+SELECT 
+    nombre,
+    dia_semana
+FROM procesion
+WHERE dia_semana != 'Domingo de Ramos';
 
--- RESPUESTA:
-
-
-
--- 16. Mostrar todas las procesiones ordenadas por la hora de inicio en orden ascendente.
-
--- RESPUESTA:
-
-
+-- 16. Mostrar todas las procesiones ordenadas por la hora de inicio 
+-- en orden ascendente.
+SELECT
+    nombre,
+    hora_inicio
+FROM procesion
+ORDER BY hora_inicio ASC;
 
 -- 17. Listar las hermandades ordenadas por antigüedad de forma descendente.
+SELECT
+    nombre,
+    antiguedad
+FROM hermandad
+ORDER BY antiguedad DESC;
 
--- RESPUESTA:
-
-
-
--- 18. Seleccionar los pasos ordenados por peso y, en caso de empate, por estilo alfabético.
-
--- RESPUESTA:
-
-
+-- 18. Seleccionar los pasos ordenados por peso y, en caso de empate, 
+-- por estilo alfabético.
+SELECT
+    nombre,
+    peso,
+    estilo
+FROM paso
+ORDER BY peso DESC, estilo DESC;
 
 -- 19. Ordenar las procesiones por día de la semana (Lunes primero). ESPECIAL
-
--- RESPUESTA:
-
-
-
--- 20. Mostrar los puntos de paso de las procesiones ordenados por hora de paso en orden descendente.
-
--- RESPUESTA:
+SELECT
+    nombre,
+    dia_semana
+FROM procesion
+ORDER BY dia_semana DESC;
 
 
+-- 20. Mostrar los puntos de paso de las procesiones ordenados 
+-- por hora de paso en orden descendente.
+SELECT
+    id_procesion,
+    punto,
+    hora_paso
+FROM itinerario
+ORDER BY hora_paso DESC;
 
 -- 21. Contar cuántas procesiones hay en total.
-
--- RESPUESTA:
-
-
+SELECT COUNT(*) AS 'Numero Total Procesiones'
+FROM procesion;
 
 -- 22. Obtener el peso promedio de todos los pasos.
-
--- RESPUESTA:
-
-
+SELECT AVG(peso) AS 'Peso Promedio de los pasos'
+FROM paso;
 
 -- 23. Calcular el número máximo de costaleros en una hermandad.
+SELECT 
+    numero_costaleros AS 'Numero Maximo Costaleros',
+    nombre
+FROM hermandad
+WHERE numero_costaleros = (SELECT MAX(numero_costaleros) FROM hermandad);
 
--- RESPUESTA:
 
-
-
--- 24. Obtener el número de procesiones que se realizan en el barrio 'Albaicín'.
-
--- RESPUESTA:
-
+-- 24. Obtener el número de procesiones que se realizan en 
+-- el barrio 'Albaicín'.
+SELECT 
+    COUNT(*) AS 'Numero procesiones del Albaicín'
+FROM procesion
+WHERE barrio = 'Albaicín';
 
 
 -- 25. Sumar el peso de todos los pasos.
+SELECT
+    SUM(peso) AS 'Peso total pasos'
+FROM paso;
 
--- RESPUESTA:
 
-
-
--- 26. Agrupar las procesiones por barrio y contar cuántas procesiones hay en cada uno.
-
--- RESPUESTA:
-
+-- 26. Agrupar las procesiones por barrio y contar 
+-- cuántas procesiones hay en cada uno.
+SELECT
+    SUM(barrio)
+FROM procesion
+GROUP BY barrio;
 
 
 -- 27. Calcular el peso total de los pasos agrupados por estilo.
