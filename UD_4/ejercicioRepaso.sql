@@ -49,7 +49,8 @@ INSERT INTO hermandad (nombre, antiguedad, numero_costaleros) VALUES
 ('Hermandad del Silencio', 1578, 90),
 ('Hermandad de la Aurora', 1635, 120),
 ('Hermandad de la Esperanza', 1945, 80),
-('Hermandad de la Soledad', 1500, 100);
+('Hermandad de la Soledad', 1500, 100),
+('Hermandad de la Virgen de la cabeza', 1500, 100);
 
 -- Inserciones en la tabla paso
 INSERT INTO paso (nombre, estilo, peso) VALUES
@@ -232,89 +233,115 @@ FROM paso;
 -- 26. Agrupar las procesiones por barrio y contar 
 -- cuántas procesiones hay en cada uno.
 SELECT
-    SUM(barrio)
+    barrio,
+    COUNT(*) AS 'Numero Procesiones por Barrio'
 FROM procesion
 GROUP BY barrio;
 
 
--- 27. Calcular el peso total de los pasos agrupados por estilo.
-
--- RESPUESTA:
-
-
-
--- 28. Mostrar las hermandades agrupadas por número de costaleros, filtrando aquellas con más de 100 costaleros.
-
--- RESPUESTA:
+-- 27. Calcular el peso total de los pasos agrupados 
+--por estilo.
+SELECT
+    estilo,
+    SUM(peso) AS 'Peso total por estilo'
+FROM paso
+GROUP BY estilo;
 
 
-
--- 29. Obtener el número de procesiones que tienen puntos de paso después de las 20:00.
-
--- RESPUESTA:
-
-
-
--- 30. Agrupar las hermandades por antigüedad y contar cuántas hay en cada rango.
-
--- RESPUESTA:
+-- 28. Mostrar las hermandades agrupadas por número 
+-- de costaleros, filtrando aquellas con más de 100 costaleros.
+SELECT
+    numero_costaleros AS 'Numero costaleros',
+    nombre
+FROM hermandad
+WHERE numero_costaleros > 100;
 
 
-
--- 31. Concatenar el nombre y barrio de cada procesión en un único campo, separados por un guion.
-
--- RESPUESTA:
-
-
-
--- 32. Mostrar las procesiones cuyos nombres contienen más de 10 caracteres.
-
--- RESPUESTA:
+-- 29. Obtener el número de procesiones que tienen puntos 
+-- de paso después de las 20:00.
+SELECT 
+    COUNT(*) AS 'Numero procesiones'
+FROM itinerario
+WHERE hora_paso > '20:00:00';
 
 
+-- 30. Agrupar las hermandades por antigüedad y 
+-- contar cuántas hay en cada rango.
+SELECT
+    COUNT(*) AS 'Numero hermanandas por antiguedad'
+FROM hermandad
+GROUP BY antiguedad;
 
--- 33. Seleccionar los nombres de las procesiones que contienen la palabra 'Soledad'.
+-- 31. Concatenar el nombre y barrio de cada procesión 
+-- en un único campo, separados por un guion.
+SELECT
+    CONCAT(nombre, " - ", barrio) AS 'Nombre - Barrio'
+FROM procesion;
 
--- RESPUESTA:
+-- 32. Mostrar las procesiones cuyos nombres contienen 
+-- más de 10 caracteres.
+SELECT
+    nombre,
+    CHAR_LENGTH(nombre) AS numero_caracteres
+FROM procesion
+HAVING CHAR_LENGTH(nombre) > 10;
+
+-- 33. Seleccionar los nombres de las procesiones que contienen 
+-- la palabra 'Soledad'.
+SELECT
+    nombre
+FROM procesion
+WHERE nombre LIKE '%soledad%';
 
 
-
--- 34. Mostrar las hermandades ordenadas por el número de costaleros en orden ascendente.
-
--- RESPUESTA:
-
-
-
--- 35. Listar los nombres de los pasos en los que la palabra 'Virgen' no aparece.
-
--- RESPUESTA:
+-- 34. Mostrar las hermandades ordenadas por el número 
+-- de costaleros en orden ascendente.
+SELECT
+    nombre,
+    numero_costaleros
+FROM hermandad
+ORDER BY numero_costaleros ASC;
 
 
+-- 35. Listar los nombres de los pasos en los que la palabra 
+-- 'Virgen' no aparece.
+SELECT
+    nombre
+FROM paso
+WHERE NOT nombre LIKE '%Virgen%'; 
 
--- 36. Calcular la diferencia entre el peso máximo y mínimo de los pasos.
-
--- RESPUESTA:
-
+-- 36. Calcular la diferencia entre el peso máximo y mínimo 
+-- de los pasos.
+SELECT
+    MAX(peso) - MIN(peso) AS 'Diferencia entre el peso MAX y MIN'
+FROM paso;
 
 
 -- 37. Mostrar solo las procesiones cuyo nombre no empieza con 'La'.
-
--- RESPUESTA:
-
-
-
--- 38. Formatear la hora de inicio de las procesiones en formato de 12 horas con AM/PM.
-
--- RESPUESTA:
+SELECT
+    nombre
+FROM procesion
+WHERE NOT nombre LIKE 'La%';
 
 
+-- 38. Formatear la hora de inicio de las procesiones en 
+-- formato de 12 horas con AM/PM.
+SELECT
+    DATE_FORMAT(hora_inicio, '%H:%i %p') AS 'Hora inicio AM/PM'
+FROM procesion;
 
--- 39. Mostrar solo la hora (sin minutos ni segundos) del paso por cada punto del itinerario. ESPECIAL
 
--- RESPUESTA:
+-- 39. Mostrar solo la hora (sin minutos ni segundos) del paso 
+-- por cada punto del itinerario. ESPECIAL
+SELECT
+    id_procesion,
+    punto,
+    EXTRACT(HOUR FROM hora_paso) AS 'Hora del paso'
+FROM itinerario;
 
-
-
--- 40. Seleccionar las procesiones que tienen su inicio en las próximas 24 horas a partir de la fecha y hora actual.
-
--- RESPUESTA:
+-- 40. Seleccionar las procesiones que tienen su inicio 
+-- en las próximas 24 horas a partir de la fecha y hora actual.
+SELECT
+    nombre,
+    hora_inicio
+FROM procesion;
