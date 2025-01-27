@@ -188,7 +188,7 @@ SELECT
     nombre,
     dia_semana
 FROM procesion
-ORDER BY dia_semana DESC;
+ORDER BY FIELD(dia_semana, 'Lunes Santo', 'Martes Santo', 'Miercoles Santo', 'Jueves Santo', 'Viernes Santo', 'Sabado Santo', 'Domingo de Ramos');
 
 
 -- 20. Mostrar los puntos de paso de las procesiones ordenados 
@@ -278,6 +278,10 @@ SELECT
     CONCAT(nombre, " - ", barrio) AS 'Nombre - Barrio'
 FROM procesion;
 
+SELECT 
+    CONCAT_WS(" - ", nombre, barrio) AS 'Nombre - Barrio'
+FROM procesion;
+
 -- 32. Mostrar las procesiones cuyos nombres contienen 
 -- más de 10 caracteres.
 SELECT
@@ -344,4 +348,12 @@ FROM itinerario;
 SELECT
     nombre,
     hora_inicio
-FROM procesion;
+FROM procesion
+WHERE hora_inicio BETWEEN TIME(NOW()) AND TIME(ADDTIME(NOW(), '06:00:00'));
+
+SELECT
+    nombre,
+    hora_inicio
+FROM procesion
+WHERE hora_inicio BETWEEN curtime() and addtime(curtime(), '06:00:00');
+
