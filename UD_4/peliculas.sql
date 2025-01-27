@@ -157,12 +157,14 @@ SELECT
 FROM pelicula
 ORDER BY duracion DESC;
 
--- 11. Mostrar los nombres de los actores asociados con las películas mediante sus identificadores.
+-- 11. Mostrar los nombres de los actores asociados 
+-- con las películas mediante sus identificadores.
 -- REVISAR !!!
 SELECT
-    (SELECT nombre FROM actor WHERE id = id_actor),
-    id_pelicula
-FROM reparto;
+    (SELECT nombre FROM actor WHERE id = id_actor) AS 'Nombre actor',
+    (SELECT titulo FROM pelicula WHERE id = id_pelicula) AS 'Nombre pelicula'
+FROM reparto
+
 
 -- 12. Seleccionar las películas cuya duración está entre 120 y 180 minutos.
 SELECT 
@@ -201,16 +203,13 @@ SELECT
 from actor;
 
 -- 19. Mostrar las películas que no tienen actores en el reparto.
--- REVISAR  
 SELECT
     id_pelicula
 FROM reparto
 WHERE NOT id_actor;
 
 -- 20. Seleccionar las películas estrenadas en los últimos 10 años.
--- REVISAR 
 SELECT
     titulo
 FROM pelicula
-WHERE anio BETWEEN 2025 AND 2015;
-
+WHERE anio BETWEEN 2015 AND 2025;

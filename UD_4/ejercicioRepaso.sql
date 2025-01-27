@@ -357,3 +357,20 @@ SELECT
 FROM procesion
 WHERE hora_inicio BETWEEN curtime() and addtime(curtime(), '06:00:00');
 
+-- EXTRAS
+-- 41. Redondear el peso de los pasos a la centena más cercana.
+SELECT
+    nombre,
+    peso,
+    ROUND(peso, -2) "Peso redondeado de los pasos"
+FROM paso;
+
+-- 42. Mostrar el peso de los pasos dividido entre 1000, con dos decimales.
+SELECT
+    nombre,
+    ROUND(peso/1000, 2)
+FROM paso;
+
+-- 43. Generar un número aleatorio entre 1 y 100.
+SELECT
+    
