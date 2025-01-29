@@ -1,11 +1,9 @@
+DROP DATABASE IF EXISTS baseDatos_peliculas;
 CREATE DATABASE baseDatos_peliculas;
 USE baseDatos_peliculas;
 
 
 -- Ejercicios de MySQL - Base de Datos de Películas (Extendida)
-
-CREATE DATABASE cine_db;
-USE cine_db;
 
 -- Tabla pelicula
 CREATE TABLE pelicula (
@@ -159,11 +157,10 @@ ORDER BY duracion DESC;
 
 -- 11. Mostrar los nombres de los actores asociados 
 -- con las películas mediante sus identificadores.
--- REVISAR !!!
 SELECT
     (SELECT nombre FROM actor WHERE id = id_actor) AS 'Nombre actor',
     (SELECT titulo FROM pelicula WHERE id = id_pelicula) AS 'Nombre pelicula'
-FROM reparto
+FROM reparto;
 
 
 -- 12. Seleccionar las películas cuya duración está entre 120 y 180 minutos.
@@ -192,10 +189,12 @@ WHERE NOT pais_origen = 'EE.UU.';
 -- ERROR 16. Mostrar la cantidad de películas por cada director.
 
 -- 17. Listar las películas con más de un registro en la tabla reparto.
+-- REVISAR
 SELECT
-    id_pelicula
+    id_pelicula,
+    COUNT(id_pelicula)
 from reparto
-WHERE id_pelicula > 1;
+WHERE COUNT(id_pelicula) > 1;
 
 -- 18. Calcular el número total de actores en la base de datos.
 SELECT
@@ -212,4 +211,4 @@ WHERE NOT id_actor;
 SELECT
     titulo
 FROM pelicula
-WHERE anio BETWEEN 2015 AND 2025;
+WHERE anio >= YEAR(NOW()) - 10;
