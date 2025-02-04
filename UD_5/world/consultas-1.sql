@@ -23,26 +23,59 @@ SELECT
 FROM country
 JOIN city ON country.capital = city.id;
 
--- Consulta 4: Muestra el nombre de la ciudad y el distrito al que pertenece
+-- Consulta 4: Muestra el nombre de la ciudad y 
+-- el distrito al que pertenece Y EL PAIS
 SELECT
     city.name,
-    city.district
-FROM city;
+    city.district,
+    country.name
+FROM city
+JOIN country ON city.countryCode = country.Code;
 
--- Consulta 6: Muestra los países y el idioma oficial que se habla en cada uno
-
+-- Consulta 6: Muestra los países y el idioma oficial 
+-- que se habla en cada uno
+SELECT
+    country.name,
+    countrylanguage.Language
+From country
+JOIN countrylanguage ON country.code = countrylanguage.countrycode
+WHERE countrylanguage.IsOfficial = "T";
 
 -- Consulta 7: Lista de ciudades junto con el idioma oficial de su país
+SELECT
+    city.name,
+    countrylanguage.Language
+FROM city
+JOIN countrylanguage ON city.CountryCode = countrylanguage.CountryCode
+WHERE countrylanguage.IsOfficial = "T";
 
-
--- Consulta 8: Muestra el nombre del país y la cantidad de ciudades que tiene registradas
-
+-- Consulta 8: Muestra el nombre del país y 
+-- la cantidad de ciudades que tiene registradas
+SELECT
+    country.name,
+    COUNT(city.name) AS numero_ciudades
+FROM country
+JOIN city ON country.Code = city.CountryCode
+GROUP BY country.name;
 
 -- Consulta 9: Muestra los países que tienen más de 5 ciudades registradas
-
+SELECT
+    country.name,
+    COUNT(city.name) AS numero_ciudades
+FROM country
+JOIN city ON country.Code = city.CountryCode
+GROUP BY country.name
+HAVING COUNT(city.name) > 5;
 
 -- Consulta 10: Lista de ciudades con su país e idioma principal
-
+SELECT
+    city.name,
+    country.name,
+    countrylanguage.language 
+FROM city
+JOIN country ON city.CountryCode = country.Code
+JOIN countrylanguage ON country.code = countrylanguage.CountryCode
+WHERE IsOfficial = "T";
 
 
 -- EJ71 - MUESTRA UNA LISTA DE LAS CIUDADES DE ESPAÑA, 
