@@ -81,7 +81,6 @@ WHERE IsOfficial = "T";
 -- EJ71 - MUESTRA UNA LISTA DE LAS CIUDADES DE ESPAÑA, 
 -- SU POBLACIÓN, LA POBLACIÓN DEL PAÍS Y 
 -- EL PORCENTAJE DE POBLACIÓN DEL PAÍS QUE VIVE EN ESA CIUDAD (2 DECIMALES)
-
 SELECT 
     city.name AS city_name,
     city.Population AS city_population,
@@ -97,13 +96,22 @@ WHERE country.name = "Spain";
 -- (2 DECIMALES).
 SELECT
     city.district,
-    country.Population
+    sum(city.population) as POBLACION_DISTRITO,
+    MAX(country.Population),
+    ROUND(sum(city.Population) / max(COUNTRY.Population) * 100, 2) AS poblacion_distrito
 FROM city
-GROUP BY city.District
 JOIN country ON city.CountryCode = country.code
-WHERE country.code = "ESP";
+WHERE country.NAME = "SPAIN"
+GROUP BY city.District;
 
 -- EJ73 - MUESTRA UNA LISTA DE LOS NOMBRES DE LAS CAPITALES EUROPEAS.
+SELECT
+    CITY.NAME,
+    COUNTRY.capital
+FROM COUNTRY
+JOIN CITY ON COUNTRY.CODE = CITY.CountryCode;
+WHERE COUNTRY.CAPITAL = CITY.NAME;
+
 
 -- EJ74 - ¿CUÁL ES LA CAPITAL DEL MUNDO MÁS POBLADA?
 
