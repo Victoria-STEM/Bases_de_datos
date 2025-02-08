@@ -53,16 +53,34 @@ SELECT
     region As regiones,
     sum(Population)
 from country
+where continent = 'Asia' 
+    OR continent = 'South America' 
+    OR continent = 'North America'
 group by Region
-having SUM(population) > 100000000; 
+having SUM(population) > 100000000;
 
 -- EJ62: MUESTRA LOS DISTRITOS DE EUROPA CON MÁS DE 3 MILLONES 
 -- DE HABITANTES (TABLA CITY)
-
+SELECT
+    city.district
+from city
+where country.continent = 'Europe'
+group by city.District
+having sum(city.Population) > 3000000
+inner join country on city.CountryCode = country.Code;
 
 -- EJ63: MUESTRA UNA LISTA DE LOS CONTINENTES Y CUÁNTOS PAÍSES 
 -- HAY EN CADA CONTINENTE
-
+select
+    continent,
+    count(code) as numer_paises
+from country
+group by continent;
 
 -- EJ64: MUESTRA UNA LISTA DE LAS REGIONES Y CUÁNTOS PAÍSES 
 -- HAY EN CADA REGIÓN
+select
+    Region,
+    count(code) AS numero_paises
+from country
+group by region; 
