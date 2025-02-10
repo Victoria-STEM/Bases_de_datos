@@ -20,8 +20,8 @@ SELECT
     continent,
     AVG(IndepYear) AS independencia_media
 FROM country
-GROUP BY Continent
-HAVING AVG(IndepYear) IS NOT NULL;
+WHERE IndepYear Is Not null
+GROUP BY Continent;
 
 -- EJ58: MUESTRA LOS DISTRITOS DE ESPAÑA (TABLA CITY) 
 -- Y LA POBLACIÓN TOTAL DE CADA UNO
@@ -29,8 +29,8 @@ SELECT
     district, 
     SUM(population)
 from city
-GROUP BY District
-HAVING countrycode = 'ESP';
+WHERE CountryCode = "ESP"
+GROUP BY District;
 
 -- EJ59: SUMA EL PORCENTAJE TOTAL DE TODOS LOS IDIOMAS AGRUPANDO POR PAÍS
 SELECT
@@ -64,10 +64,10 @@ having SUM(population) > 100000000;
 SELECT
     city.district
 from city
+join country on city.CountryCode = country.Code
 where country.continent = 'Europe'
 group by city.District
-having sum(city.Population) > 3000000
-inner join country on city.CountryCode = country.Code;
+having sum(city.Population) > 3000000;
 
 -- EJ63: MUESTRA UNA LISTA DE LOS CONTINENTES Y CUÁNTOS PAÍSES 
 -- HAY EN CADA CONTINENTE

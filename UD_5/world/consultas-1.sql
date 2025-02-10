@@ -106,22 +106,54 @@ GROUP BY city.District;
 
 -- EJ73 - MUESTRA UNA LISTA DE LOS NOMBRES DE LAS CAPITALES EUROPEAS.
 SELECT
-    CITY.NAME,
-    COUNTRY.capital
+    CITY.NAME
 FROM COUNTRY
-JOIN CITY ON COUNTRY.CODE = CITY.CountryCode;
-WHERE COUNTRY.CAPITAL = CITY.NAME;
-
+JOIN CITY ON COUNTRY.CODE = CITY.CountryCode
+WHERE COUNTRY.Continent = "europe";
 
 -- EJ74 - ¿CUÁL ES LA CAPITAL DEL MUNDO MÁS POBLADA?
+-- NO SALE
+SELECT
+    city.name
+from city
+JOIN country ON city.id = country.capital
+ORDER BY city.Population DESC
+LIMIT 1;
 
--- EJ75 - MUESTRA UNA LISTA CON EL NOMBRE DE LOS PAÍSES Y LA CANTIDAD DE IDIOMAS QUE SE HABLAN EN DICHO PAÍS.
+-- EJ75 - MUESTRA UNA LISTA CON EL NOMBRE DE LOS PAÍSES Y 
+-- LA CANTIDAD DE IDIOMAS QUE SE HABLAN EN DICHO PAÍS.
+SELECT
+    country.name,
+    COUNT(countrylanguage.Language) as numero_idiomas
+from country
+JOIN countrylanguage on country.code = countrylanguage.countrycode
+group BY country.name;
 
 -- EJ76 - MUESTRA UNA LISTA CON EL NOMBRE DE LOS PAÍSES Y LA CANTIDAD DE IDIOMAS OFICIALES QUE SE HABLAN EN DICHO PAÍS.
+SELECT
+    country.name,
+    COUNT(countrylanguage.Language) as numero_idiomas
+FROM country
+JOIN countrylanguage on country.code = countrylanguage.countrycode
+WHERE countrylanguage.IsOfficial = 'T'
+GROUP BY country.name;
 
--- EJ77 - MUESTRA UNA LISTA CON EL NOMBRE DE TODOS LOS PAÍSES Y LA CANTIDAD DE CIUDADES DE CADA PAÍS DISPONIBLES EN LA BASE DE DATOS.
+-- EJ77 - MUESTRA UNA LISTA CON EL NOMBRE DE TODOS LOS PAÍSES Y 
+-- LA CANTIDAD DE CIUDADES DE CADA PAÍS DISPONIBLES EN LA BASE DE DATOS.
+SELECT
+    country.name,
+    COUNT(city.id) AS numero_ciudades 
+FROM country 
+JOIN city ON country.code = city.CountryCode
+GROUP BY country.name;
 
 -- EJ78 - MUESTRA EL NOMBRE DE LOS PAÍSES SIN CIUDADES REGISTRADAS.
+SELECT
+    country.name
+FROM country
+JOIN city ON country.code = city.CountryCode
+GROUP BY country.name
+WHERE COUNT(city.name) = 0;
 
 -- EJ79 - MUESTRA UNA LISTA CON EL NOMBRE DE LOS PAÍSES, LOS IDIOMAS HABLADOS Y LA CANTIDAD DE PERSONAS QUE HABLAN CADA IDIOMA EN CADA PAÍS.
 
