@@ -148,14 +148,11 @@ JOIN city ON country.code = city.CountryCode
 GROUP BY country.name;
 
 -- EJ78 - MUESTRA EL NOMBRE DE LOS PAÍSES SIN CIUDADES REGISTRADAS.
--- NO ME SALEEEEEEEE
 SELECT
-    country.name,
-    COUNT(city.name)
+    country.name
 FROM country
-JOIN city ON country.code = city.CountryCode
-GROUP BY city.countrycode
-WHERE COUNT(city.name) = 0;
+LEFT JOIN city ON country.code = city.CountryCode
+WHERE city.name IS NULL;
 
 -- EJ79 - MUESTRA UNA LISTA CON EL NOMBRE DE LOS PAÍSES, 
 -- LOS IDIOMAS HABLADOS Y LA CANTIDAD DE PERSONAS 
@@ -170,16 +167,17 @@ JOIN countrylanguage on country.code = countrylanguage.countryCode;
 -- EJ80 - MUESTRA UNA LISTA CON EL NOMBRE DE LA CAPITAL 
 -- DE LOS PAÍSES CON ESPAÑOL COMO IDIOMA OFICIAL.
 SELECT
-    city.name,
-    country.capital
+    city.name
 From city
-join country on city.countryCode = country.code
+JOIN country on city.countryCode = country.code
 JOIN countrylanguage on country.code = countrylanguage.countrycode
-WHERE countrylanguage.IsOfficial = "T" and countrylanguage.language = "Spanish" and city.id = country.capital;
+WHERE countrylanguage.IsOfficial = "T" and countrylanguage.language = "Spanish";
 
 -- EJ81 - MUESTRA EL PORCENTAJE DE LA POBLACIÓN MUNDIAL QUE HABLA ESPAÑOL.
 SELECT
-    ROUND((SUM(countrylanguage.Percentage * country.population / 100) / SUM(Country.population)) * 100)
+    ROUND(SUM(countrylanguage.Percentage * country.population / 100) 
+    / 
+    (SELECT SUM(population) FROM country) * 100)
 from country
 JOIN countrylanguage on country.code = countrylanguage.countryCode
 WHERE countrylanguage.language = "Spanish";
@@ -187,11 +185,14 @@ WHERE countrylanguage.language = "Spanish";
 -- EJ82 - MUESTRA UNA LISTA CON LOS IDIOMAS Y EL PORCENTAJE DE 
 -- LA POBLACIÓN MUNDIAL QUE HABLA CADA IDIOMA (ORDENA DE MAYOR A MENOR).
 SELECT
-    ROUND((SUM(countrylanguage.Percentage * country.population / 100) / SUM(Country.population)) * 100),
+    SUM(countrylanguage.Percentage * country.population / 100) 
+    / 
+    (SELECT SUM(population) FROM country) * 100 AS porcentajes,
     countrylanguage.language
 from country
 JOIN countrylanguage on country.code = countrylanguage.countryCode
-GROUP by countrylanguage.language;
+GROUP by countrylanguage.language
+ORDER by porcentajes DESC;
 
 -- EJ83 - MUESTRA TODAS LAS CIUDADES QUE NO SON CAPITALES.
 SELECT
