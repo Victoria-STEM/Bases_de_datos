@@ -144,6 +144,16 @@ GROUP BY address.address_id;
 
 
 -- 46. MUESTRA UNA LISTA DE LAS PELÍCULAS Y CUÁNTO HAN PAGADO DE MEDIA POR ALQUILARLAS.
+-- en proceso
+SELECT
+    film.title as peliculas,
+    AVG(payment.amount) AS media_pago
+FROM film
+GROUP BY film.film_id
+
+film > film_id
+payment > payment_id staff_id customer_id
+
 -- 47. ¿CUÁL HA SIDO LA PELÍCULA MÁS RENTABLE?
 -- 48. MUESTRA UNA LISTA DE LOS CLIENTES Y CUÁNTO DINERO HA GASTADO CADA UNO.
 -- 49. ¿QUIÉN HA SIDO EL CLIENTE MÁS RENTABLE?
