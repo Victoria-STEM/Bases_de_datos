@@ -145,21 +145,92 @@ GROUP BY address.address_id;
 
 -- 46. MUESTRA UNA LISTA DE LAS PELÍCULAS Y CUÁNTO HAN PAGADO DE MEDIA POR ALQUILARLAS.
 -- en proceso
+-- SELECT
+--     film.title as titulo_pelicula,
+--     AVG(film.rental_rate) as media_alquiler
+-- FROM film
+-- JOIN inventory on film.film_id = inventory.film_id
+-- JOIN rental ON inventory.inventory_id = rental.inventory_id
+-- GROUP BY film.title;
+
+-- SELECT
+--     title
+--     rental_rate
+-- from film;
+
+-- SELECT
+--     amount
+-- from payment;
+
 SELECT
     film.title as peliculas,
     AVG(payment.amount) AS media_pago
 FROM film
-GROUP BY film.film_id
+JOIN inventory ON film.film_id = inventory.film_id
+JOIN rental ON inventory.inventory_id = rental.inventory_id
+JOIN payment ON rental.rental_id = payment.rental_id
+GROUP BY film.film_id;
 
-film > film_id
-payment > payment_id staff_id customer_id
 
 -- 47. ¿CUÁL HA SIDO LA PELÍCULA MÁS RENTABLE?
+SELECT
+    film.title as peliculas,
+    AVG(payment.amount) AS media_pago
+FROM film
+JOIN inventory ON film.film_id = inventory.film_id
+JOIN rental ON inventory.inventory_id = rental.inventory_id
+JOIN payment ON rental.rental_id = payment.rental_id
+GROUP BY film.film_id
+ORDER BY AVG(payment.amount) DESC
+LIMIT 1;
+
 -- 48. MUESTRA UNA LISTA DE LOS CLIENTES Y CUÁNTO DINERO HA GASTADO CADA UNO.
+SELECT
+    CONCAT(customer.first_name, " ", customer.last_name) AS nombre_cliente,
+    SUM(payment.amount) AS gastos_por_cliente
+FROM customer
+JOIN payment ON customer.customer_id = payment.customer_id
+GROUP BY payment.customer_id;
+
+
 -- 49. ¿QUIÉN HA SIDO EL CLIENTE MÁS RENTABLE?
+SELECT
+    CONCAT(customer.first_name, " ", customer.last_name) AS nombre_cliente,
+    SUM(payment.amount) AS gastos_por_cliente
+FROM customer
+JOIN payment ON customer.customer_id = payment.customer_id
+GROUP BY payment.customer_id
+ORDER BY SUM(payment.amount) DESC
+LIMIT 1;
+
 -- 50. ¿HAY ALGUNA PELÍCULA PARA LA QUE NO TENGAMOS NINGUNA COPIA?
+SELECT
+    -- inventory.inventory_id AS numero_inventario,
+    film.title As titulo_pelicula
+from film
+LEFT JOIN inventory ON film.film_id = inventory.film_id 
+WHERE inventory.inventory_id IS NULL;
+
 -- 51. MUESTRA UNA LISTA DE LAS PELÍCULAS QUE NOS FALTAN EN LA TIENDA 2.
+SELECT
+    inventory.inventory_id AS numero_inventario,
+    inventory.store_id AS ID_tienda,
+    film.title As titulo_pelicula
+from film
+LEFT JOIN inventory ON film.film_id = inventory.film_id
+WHERE inventory.inventory_id IS NULL (AND inventory.store_id = 2);
+
+
 -- 52. ¿CUÁL ES EL ACTOR MÁS FAMOSO?
+SELECT 
+    CONCAT(actor.first_name, " ", actor.last_name) AS actor,
+    COUNT(film_actor.film_id) AS numero_peliculas 
+FROM actor
+JOIN film_actor ON actor.actor_id = film_actor.actor_id
+GROUP BY actor.actor_id
+ORDER BY COUNT(film_actor.film_id) DESC
+LIMIT 1;
+
 
 
 -- 53. ¿CUÁL ES LA PELÍCULA MÁS ALQUILADA EN LA TIENDA 2?
