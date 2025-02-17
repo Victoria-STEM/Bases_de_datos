@@ -110,6 +110,9 @@ JOIN store ON address.address_id = store.address_id
 JOIN inventory ON store.address_id = inventory.store_id 
 GROUP BY store.address_id;
 
+-- SELECT
+--     store.store_id
+-- from store;
 
 -- address.address_id
 -- store.address_id,
@@ -117,34 +120,45 @@ GROUP BY store.address_id;
 
 -- 44. ¿CUÁL ES LA PELÍCULA DE LA QUE TENEMOS MÁS COPIAS?
 SELECT
-    film.title,
+    f.title,
     count(*) AS stock
-from film
-JOIN inventory ON film.film_id = inventory.film_id
-GROUP BY film.title
+from film f
+JOIN inventory i ON f.film_id = i.film_id
+GROUP BY f.title
 ORDER BY count(*) DESC
 LIMIT 1;
 
 
 -- 45. MUESTRA LA DIRECCIÓN DE LAS TIENDAS Y CUÁNTO EN TOTAL HA FACTURADO CADA UNA.
+
+-- Está mal:
 SELECT
     address.address as direccion,
-    COUNT(*) as facturacion
+    SUM(payment.amount) as facturacion -- era un SUM no n count!
 FROM address
 JOIN staff ON address.address_id = staff.address_id
 JOIN payment ON staff.staff_id = payment.staff_id 
 GROUP BY address.address_id;
 
--- address >> address_id
+-- Está bien:
+SELECT
+    address.address as direccion,
+    SUM(payment.amount) as facturacion
+FROM payment
+join rental on payment.rental_id = rental.rental_id
+join inventory on rental.inventory_id = inventory.inventory_id
+join store on inventory.store_id = store.store_id
+join address on store.address_id = address.address_id
+GROUP BY store.store_id;
 
+-- address >> address_id
 -- staff >> staff_id
 -- staff >> address_id
-
 -- payment >> staff_id
 
 
 -- 46. MUESTRA UNA LISTA DE LAS PELÍCULAS Y CUÁNTO HAN PAGADO DE MEDIA POR ALQUILARLAS.
--- en proceso
+
 -- SELECT
 --     film.title as titulo_pelicula,
 --     AVG(film.rental_rate) as media_alquiler
@@ -154,17 +168,19 @@ GROUP BY address.address_id;
 -- GROUP BY film.title;
 
 -- SELECT
---     title
---     rental_rate
+--     title,
+--     rental_rate,
+--     rental_id
 -- from film;
 
 -- SELECT
---     amount
+--     amount,
+--     rental_id
 -- from payment;
 
 SELECT
     film.title as peliculas,
-    AVG(payment.amount) AS media_pago
+    ROUND(AVG(payment.amount), 2) AS media_pago
 FROM film
 JOIN inventory ON film.film_id = inventory.film_id
 JOIN rental ON inventory.inventory_id = rental.inventory_id
@@ -174,15 +190,15 @@ GROUP BY film.film_id;
 
 -- 47. ¿CUÁL HA SIDO LA PELÍCULA MÁS RENTABLE?
 SELECT
-    film.title as peliculas,
-    AVG(payment.amount) AS media_pago
+    film.title as peliculas
 FROM film
 JOIN inventory ON film.film_id = inventory.film_id
 JOIN rental ON inventory.inventory_id = rental.inventory_id
 JOIN payment ON rental.rental_id = payment.rental_id
 GROUP BY film.film_id
-ORDER BY AVG(payment.amount) DESC
+ORDER BY Sum(payment.amount) DESC
 LIMIT 1;
+
 
 -- 48. MUESTRA UNA LISTA DE LOS CLIENTES Y CUÁNTO DINERO HA GASTADO CADA UNO.
 SELECT
@@ -195,13 +211,14 @@ GROUP BY payment.customer_id;
 
 -- 49. ¿QUIÉN HA SIDO EL CLIENTE MÁS RENTABLE?
 SELECT
-    CONCAT(customer.first_name, " ", customer.last_name) AS nombre_cliente,
-    SUM(payment.amount) AS gastos_por_cliente
+    CONCAT(customer.first_name, " ", customer.last_name) AS cliente,
+    SUM(payment.amount) AS ingresos_generados
 FROM customer
 JOIN payment ON customer.customer_id = payment.customer_id
 GROUP BY payment.customer_id
 ORDER BY SUM(payment.amount) DESC
 LIMIT 1;
+
 
 -- 50. ¿HAY ALGUNA PELÍCULA PARA LA QUE NO TENGAMOS NINGUNA COPIA?
 SELECT
@@ -218,7 +235,7 @@ SELECT
     film.title As titulo_pelicula
 from film
 LEFT JOIN inventory ON film.film_id = inventory.film_id
-WHERE inventory.inventory_id IS NULL (AND inventory.store_id = 2);
+WHERE inventory.inventory_id IS NULL AND inventory.store_id = 2;
 
 
 -- 52. ¿CUÁL ES EL ACTOR MÁS FAMOSO?
