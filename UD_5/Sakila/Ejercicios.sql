@@ -248,10 +248,102 @@ GROUP BY actor.actor_id
 ORDER BY COUNT(film_actor.film_id) DESC
 LIMIT 1;
 
-
-
 -- 53. ¿CUÁL ES LA PELÍCULA MÁS ALQUILADA EN LA TIENDA 2?
+-- SELECT
+--     film.title AS titulo,
+--     COUNT(rental.inventory_id) AS veces_alquilada
+-- from film
+-- JOIN rental on inventory.inventory_id = rental.inventory_id
+-- JOIN inventory on film.film_id = inventory.film_id
+-- GROUP BY film.film_id;
+
+SELECT
+    film.title AS titulo,
+    COUNT(rental.inventory_id) AS veces_alquilada
+from rental
+JOIN inventory on rental.inventory_id = inventory.inventory_id
+JOIN film on inventory.film_id = film.film_id
+GROUP BY film.film_id
+ORDER BY COUNT(rental.inventory_id) DESC
+LIMIT 1;
+
+-- rental >> rental_id, inventory_id
+-- inventory > film_id
+-- film >> film_id
+
 -- 54. ¿DESDE QUÉ PAÍS NOS HAN ALQUILADO MÁS PELÍCULAS?
+SELECT
+    country.country AS pais
+FROM country
+JOIN city on country.country_id = city.country_id
+JOIN address on city.city_id = address.city_id
+JOIN store ON address.address_id = store.address_id
+JOIN inventory On store.store_id = inventory.store_id
+JOIN rental on inventory.inventory_id = rental.inventory_id
+group by country.country_id
+ORDER by COUNT(rental.rental_id) DESC
+LIMIT 1;
+
+-- SELECT
+--     rental_id
+-- from rental;
+
+-- country > country_id
+-- city > country_id, city_id
+-- address > address_id, city_id
+-- store > address_id, store_id
+
+-- inventory > inventory_id, store_id
+-- rental > customer_id, inventory_id, rental_id 
+
+
 -- 55. MUESTRA LA DIRECCIÓN DE CADA TIENDA Y LA CANTIDAD DE USUARIOS INACTIVOS.
+SELECT
+    address.address as direccion_tienda,
+    count(customer.active) as usuarios_inactivos
+from address
+LEFT JOIN customer on address.address_id = customer.address_id
+LEFT JOIN store on customer.address_id = store.address_id 
+group by address.address_id
+WHERE customer.active = 0;
+
+-- SELECT
+--     active
+-- from customer;
+
+-- address >> address_id
+-- customer >> customer, address_id
+-- store >> address_id
+
 -- 56. ¿CUÁNTOS USUARIOS SIN TELÉFONO TENEMOS?
--- 57. MUESTRA UN LISTADO DE LAS CATEGORÍAS Y CUÁNTO DINERO HEMOS GANADO CON CADA UNA DE ELLAS.
+SELECT
+    COUNT(address.phone) AS usuarios_sin_telefono
+from address
+LEFT JOIN customer ON address.address_id = customer.address_id
+WHERE address.phone IS NULL;
+
+-- address > address_id, city_id
+-- customer > customer_id, store_id, address_id
+SELECT
+    phone
+from address;
+
+-- 57. MUESTRA UN LISTADO DE LAS CATEGORÍAS Y CUÁNTO DINERO 
+-- HEMOS GANADO CON CADA UNA DE ELLAS.
+SELECT
+    category.name AS nombre_categorias,
+    SUM(payment.amount) AS ganacias_obtenidas
+from category
+JOIN film_category ON category.category_id = film_category.category_id
+JOIN film on film_category.film_id = film.film_id
+JOIN inventory ON film.film_id = inventory.film_id
+JOIN rental ON inventory.inventory_id = rental.inventory_id
+JOIN payment ON rental.rental_id = payment.rental_id 
+GROUP BY category.category_id;
+
+-- category > category_id
+-- film_category > category_id, film_id
+-- film > film_id
+-- inventory > inventory_id, film_id, store_id
+-- rental > rental_id, inventory_id, customer_id, staff_id
+-- payment > payment_id, customer_id, rental_id, staff_id
