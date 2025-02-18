@@ -245,7 +245,7 @@ SELECT
 FROM actor
 JOIN film_actor ON actor.actor_id = film_actor.actor_id
 GROUP BY actor.actor_id
-ORDER BY COUNT(film_actor.film_id) DESC
+ORDER BY numero_peliculas DESC
 LIMIT 1;
 
 -- 53. ¿CUÁL ES LA PELÍCULA MÁS ALQUILADA EN LA TIENDA 2?
