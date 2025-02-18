@@ -273,7 +273,8 @@ LIMIT 1;
 
 -- 54. ¿DESDE QUÉ PAÍS NOS HAN ALQUILADO MÁS PELÍCULAS?
 SELECT
-    country.country AS pais
+    country.country AS pais,
+    COUNT(*)
 FROM country
 JOIN city on country.country_id = city.country_id
 JOIN address on city.city_id = address.city_id
@@ -281,7 +282,19 @@ JOIN store ON address.address_id = store.address_id
 JOIN inventory On store.store_id = inventory.store_id
 JOIN rental on inventory.inventory_id = rental.inventory_id
 group by country.country_id
-ORDER by COUNT(rental.rental_id) DESC
+ORDER by COUNT(rental.rental_id) DESC;
+LIMIT 1;
+
+SELECT 
+	CO.COUNTRY,
+    COUNT(*) AS ALQUILERES
+FROM RENTAL RENT
+JOIN CUSTOMER CUST ON RENT.CUSTOMER_ID=CUST.CUSTOMER_ID
+JOIN ADDRESS AD ON CUST.ADDRESS_ID=AD.ADDRESS_ID
+JOIN CITY CI ON AD.CITY_ID=CI.CITY_ID
+JOIN COUNTRY CO ON CI.COUNTRY_ID=CO.COUNTRY_ID
+GROUP BY CO.COUNTRY_ID
+ORDER BY ALQUILERES DESC
 LIMIT 1;
 
 -- SELECT
@@ -300,12 +313,12 @@ LIMIT 1;
 -- 55. MUESTRA LA DIRECCIÓN DE CADA TIENDA Y LA CANTIDAD DE USUARIOS INACTIVOS.
 SELECT
     address.address as direccion_tienda,
-    count(customer.active) as usuarios_inactivos
-from address
-LEFT JOIN customer on address.address_id = customer.address_id
-LEFT JOIN store on customer.address_id = store.address_id 
-group by address.address_id
-WHERE customer.active = 0;
+    count(*) as usuarios_inactivos
+from customer
+JOIN store on customer.store_id = store.store_id 
+JOIN address on store.address_id = address.address_id
+WHERE customer.active = false
+group by store.store_id;
 
 -- SELECT
 --     active
@@ -321,6 +334,11 @@ SELECT
 from address
 LEFT JOIN customer ON address.address_id = customer.address_id
 WHERE address.phone IS NULL;
+
+-- SELECT COUNT(*) AS USUARIOS_SIN_TELEFONO
+-- FROM CUSTOMER CUST
+-- JOIN ADDRESS AD ON CUST.ADDRESS_ID=AD.ADDRESS_ID
+-- WHERE PHONE IS NULL OR PHONE="";
 
 -- address > address_id, city_id
 -- customer > customer_id, store_id, address_id
