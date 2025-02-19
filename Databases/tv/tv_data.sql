@@ -229,3 +229,54 @@ INSERT INTO emision (id, programa_id, fecha, canal_id) VALUES
 (48, 9, NULL, 8),
 (49, NULL, '2025-03-22', 9),
 (50, 10, '2025-03-23', NULL);
+
+INSERT INTO programa_presentador (programa_id, presentador_id) VALUES
+(1, 1),
+(2, 3),
+(3, 4),
+(4, 5),
+(5, 2),
+(6, 1),
+(7, 4),
+(8, 3),
+(9, 2),
+(10, 5),
+(11, 1),
+(12, 2),
+(13, 4),
+(14, 5),
+(15, 3);
+
+INSERT INTO programa_guionista (programa_id, guionista_id) VALUES
+(1, 2),
+(2, 3),
+(3, 1),
+(4, 4),
+(5, 5),
+(6, 2),
+(7, 3),
+(8, 1),
+(9, 4),
+(10, 5),
+(11, 2),
+(12, 3),
+(13, 1),
+(14, 4),
+(15, 5);
+
+INSERT INTO programa_publicidad (programa_id, publicidad_id) VALUES
+(1, 1),
+(2, 2),
+(3, 3),
+(4, 4),
+(5, 5),
+(6, 1),
+(7, 2),
+(8, 3),
+(9, 4),
+(10, 5),
+(11, 1),
+(12, 2),
+(13, 3),
+(14, 4),
+(15, 5);

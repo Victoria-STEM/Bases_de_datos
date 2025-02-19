@@ -74,3 +74,30 @@ CREATE TABLE guionista (
     nombre VARCHAR(100), 
     experiencia INT 
 );
+
+CREATE TABLE programa_presentador (
+    programa_id INT,
+    presentador_id INT,
+    FOREIGN KEY (programa_id) REFERENCES programa(id),
+    FOREIGN KEY (presentador_id) REFERENCES presentador(id),
+    PRIMARY KEY (programa_id, presentador_id)
+);
+
+CREATE TABLE programa_guionista (
+    programa_id INT,
+    guionista_id INT,
+    FOREIGN KEY (programa_id) REFERENCES programa(id),
+    FOREIGN KEY (guionista_id) REFERENCES guionista(id),
+    PRIMARY KEY (programa_id, guionista_id)
+);
+
+CREATE TABLE programa_publicidad (
+    programa_id INT,
+    publicidad_id INT,
+    FOREIGN KEY (programa_id) REFERENCES programa(id),
+    FOREIGN KEY (publicidad_id) REFERENCES publicidad(id),
+    PRIMARY KEY (programa_id, publicidad_id)
+);
+
+ALTER TABLE programa ADD productora_id INT;
+ALTER TABLE programa ADD FOREIGN KEY (productora_id) REFERENCES productora(id);
