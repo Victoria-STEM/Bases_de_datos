@@ -39,19 +39,84 @@ LIMIT 1;
 -- 23. CREA UN CÓDIGO CONCATENANDO LAS 4 PRIMERAS LETRAS DE CADA PELÍCULA Y LOS 2 ÚLTIMOS DÍGITOS DE LA FECHA DE LANZAMIENTO.
 -- 24. IGUAL QUE EL ANTERIOR PERO EN MINÚSCULA
 -- 25. CREA UN CÓDIGO DE ACTOR CONCATENANDO LAS 3 PRIMERAS LETRAS DEL NOMBRE Y LAS 3 PRIMERAS LETRAS DE LOS APELLIDOS DE CADA ACTOR Y DÁNDOLE LA VUELTA A LA CADENA. EN MINÚSCULA.
+SELECT
+    LOWER(CONCAT(SUBSTRING(actor.last_name, 1, 3), SUBSTRING(actor.first_name, 1, 3)))
+from actor;
+
 -- 26. MUESTRA LA DURACIÓN MEDIA DE LAS PELÍCULAS AGRUPADAS POR RATING (REDONDEA 2 DECIMALES)
 -- 27. SUPONIENDO QUE RENTAL_DURATION ES LA DURACIÓN EN DÍAS DEL ALQUILER, Y QUE RENTAL_RATE ES EL PRECIO DIARIO DE CADA PELÍCULA, MUESTRA: EL NOMBRE DE LA PELÍCULA, LOS DÍAS DE ALQUILER, EL PRECIO DIARIO, EL PRECIO TOTAL Y UNA COLUMNA QUE DIGA CUÁNTOS BILLETES DE 10 DÓLARES NECESITARÍA PARA ALQUILARLA.
 -- 28. SELECCIONA EL TÍTULO DE LAS PELÍCULAS, UNA COLUMNA QUE MUESTRE SI DURA MÁS O MENOS DE 2H, OTRA COLUMNA QUE MUESTRE SI TIENE O NO ESCENAS ELIMINADAS Y OTRA QUE MUESTRE SI TIENE O NO TRAILERS (COLUMNAS BOOLEANAS).
 -- 29. SELECCIONA EL TÍTULO DE LAS PELÍCULAS Y UNA COLUMNA QUE MUESTRE SI LA PELÍCULA ES APTA PARA TODOS LOS PÚBLICOS (G, PG Y PG-13).
 -- 30. SELECCIONA LA DURACIÓN MÁXIMA DE LAS PELÍCULAS AGRUPADAS POR RENTAL_DURATION.
 -- 31. SELECCIONA EL COSTE DE REEMPLAZO MEDIO DE LAS PELÍCULAS AGRUPADAS POR DURACIÓN>120.
--- 32. ¿CUÁL ES EL ACTOR QUE MÁS PELÍCULAS HA HECHO? TABLAS ACTOR Y FILM_ACTOR (USA LIMIT 1).
--- 33. MUESTRA LAS CATEGORÍAS DE PELÍCULA (CÓDIGO DE CATEGORÍA) QUE HAY Y CUÁNTAS PELÍCULAS HAY DE CADA CATEGORÍA.
--- 34. MUESTRA LOS DISTINTOS AÑOS DE LANZAMIENTO PARA LOS QUE TENEMOS PELÍCULAS.
--- 35. MUESTRA EN MINÚSCULA EL NOMBRE Y LOS APELLIDOS DE LOS ACTORES QUE HAN HECHO MÁS DE 15 PELÍCULAS (CUENTA SOLO PELÍCULAS DE MÁS DE 100 MINUTOS).
--- 36. ¿CUÁL ES EL RENTAL_RATE MEDIO DE LAS PELÍCULAS EN LAS QUE APARECE UN FRISBEE?
--- 37. ¿QUÉ ACTOR HA PARTICIPADO EN MÁS PELÍCULAS CON FRISBEE? (USA LIMIT 1).
+SELECT
+    ROUND(AVG(replacement_cost), 2)
+from film
+GROUP BY length > 120;
 
+-- 32. ¿CUÁL ES EL ACTOR QUE MÁS PELÍCULAS HA HECHO? TABLAS ACTOR Y FILM_ACTOR (USA LIMIT 1).
+
+
+-- 33. MUESTRA LAS CATEGORÍAS DE PELÍCULA (CÓDIGO DE CATEGORÍA) QUE HAY Y 
+-- CUÁNTAS PELÍCULAS HAY DE CADA CATEGORÍA.
+SELECT
+    category.category_id as codigo_categoria,
+    COUNT(film.film_id) as numero_peliculas
+FROM category
+JOIN film_category ON category.category_id = film_category.category_id
+JOIN film ON film_category.film_id = film.film_id
+GROUP BY category.category_id;
+
+-- 34. MUESTRA LOS DISTINTOS AÑOS DE LANZAMIENTO PARA LOS QUE TENEMOS PELÍCULAS.
+SELECT DISTINCT
+    release_year
+from film;
+
+-- 35. MUESTRA EN MINÚSCULA EL NOMBRE Y LOS APELLIDOS DE LOS ACTORES 
+-- QUE HAN HECHO MÁS DE 15 PELÍCULAS (CUENTA SOLO PELÍCULAS DE MÁS DE 100 MINUTOS).
+SELECT
+    LOWER(CONCAT(actor.first_name, " ", actor.last_name)) as actor,
+    COUNT(film.film_id) as cantidad
+from actor
+JOIN film_actor ON actor.actor_id = film_actor.actor_id
+JOIN film ON film_actor.film_id = film.film_id
+WHERE film.length > 100
+GROUP BY actor.actor_id
+HAVING cantidad > 15
+ORDER BY cantidad DESC;
+
+
+-- 36. ¿CUÁL ES EL RENTAL_RATE MEDIO DE LAS PELÍCULAS EN LAS QUE APARECE UN FRISBEE?
+SELECT
+    AVG(film.rental_rate) as rental_rate
+FROM film
+WHERE film.title LIKE '%Frisbee%';
+
+-- rental -> rental_id, inventory_id, customer_id, staff_id
+-- inventory -> inventory_id, store_id, film_id
+
+
+-- 37. ¿QUÉ ACTOR HA PARTICIPADO EN MÁS PELÍCULAS CON FRISBEE? (USA LIMIT 1).
+SELECT
+    LOWER(CONCAT(actor.first_name, " ", actor.last_name)) as actor
+FROM actor
+JOIN film_actor ON actor.actor_id = film_actor.actor_id
+JOIN film ON film_actor.film_id = film.film_id
+WHERE film.title LIKE '%Frisbee%'
+GROUP BY actor.actor_id
+ORDER By count(film.film_id) DESC;
+LIMIT 1;
+
+-- actor -> actor_id
+-- film_actor -> actor_id, film_id
+-- film -> film_id
+
+-- payment -> payment_id, rental_id, customer_id, staff_id
+-- store -> store_id, address_id
+-- customer -> customer_id, store_id, address_id
+-- rental -> rental_id, inventory_id, customer_id, staff_id
+-- inventory -> inventory_id, store_id, film_id
+-- customer -> customer_id, store_id, address_id
 
 
 -- 38. SELECCIONA UNA LISTA DE LOS ACTORES (CONCATENA NOMBRE Y APELLIDOS) 
@@ -239,40 +304,92 @@ WHERE i.inventory_id IS NULL AND s.store_id = 2;
 
 -- 52. ¿CUÁL ES EL ACTOR MÁS FAMOSO?
 SELECT
-    CONCAT(ACTOR.FIRST_NAME, " ", ACTOR.LAST_NAME) AS ACTOR
-FROM RENTAL RENT
-JOIN INVENTORY INV ON RENT.INVENTORY_ID=INV.INVENTORY_ID
-JOIN FILM ON INV.FILM_ID=FILM.FILM_ID
-JOIN FILM_ACTOR FA ON FA.FILM_ID=FILM.FILM_ID
-JOIN ACTOR ON FA.ACTOR_ID=ACTOR.ACTOR_ID
-GROUP BY ACTOR.ACTOR_ID
-ORDER BY  COUNT(*) DESC
+    CONCAT(actor.first_name, " ", actor.last_name) as actor,
+    SUM(payment.amount) as recaudacion
+FROM payment
+JOIN rental ON payment.rental_id = rental.rental_id
+JOIN inventory ON rental.inventory_id = inventory.inventory_id
+JOIN film_actor ON inventory.film_id = film_actor.film_id
+JOIN actor ON film_actor.actor_id = actor.actor_id
+GROUP BY actor.actor_id
+ORDER BY recaudacion DESC
 LIMIT 1;
 
--- actor -> actor_id
--- film_actor -> actor_id, film_id
--- film -> film_id
--- payment -> payment_id, rental_id, customer_id, staff_id
+-- payment -> rental_id, payment_id, customer_id, staff_id
 -- rental -> rental_id, inventory_id, customer_id, staff_id
--- store -> store_id, address_id
--- customer -> customer_id, store_id, address_id
 -- inventory -> inventory_id, store_id, film_id
+-- film_actor -> actor_id, film_id
+-- actor -> actor_id
 
 -- 53. ¿CUÁL ES LA PELÍCULA MÁS ALQUILADA EN LA TIENDA 2?
 SELECT
     film.title as pelicula
 FROM film
-JOIN inventory on film.film_id = inventory.film_id
+JOIN inventory ON film.film_id = inventory.film_id
 JOIN rental ON inventory.inventory_id = rental.inventory_id
-GROUP BY film.film_id
-ORDER BY COUNT(*) DESC
-limit 1;
+where inventory.store_id = 2
+group by film.film_id
+ORDER BY COUNT(rental.rental_id) DESC
+LIMIT 1;
+
+
+-- film -> film_id
+-- inventory -> inventory_id, store_id, film_id
+-- store -> store_id, address_id
+-- staff -> store_id, address_id, staff_id
+-- rental -> rental_id, inventory_id, customer_id, staff_id
+
+
+-- actor -> actor_id
+-- film_actor -> actor_id, film_id
+-- film -> film_id
+-- payment -> payment_id, rental_id, customer_id, staff_id
+-- store -> store_id, address_id
+-- customer -> customer_id, store_id, address_id
+-- rental -> rental_id, inventory_id, customer_id, staff_id
+-- inventory -> inventory_id, store_id, film_id
+-- customer -> customer_id, store_id, address_id
 
 
 -- 54. ¿DESDE QUÉ PAÍS NOS HAN ALQUILADO MÁS PELÍCULAS?
 SELECT
-
+    c.country as pais
+FROM country c
+join city cy on c.country_id = cy.country_id
+join address a on cy.city_id = a.city_id
+join customer cu on a.address_id = cu.address_id
+join rental r on cu.customer_id = r.customer_id
+GROUP BY c.country_id
+ORDER BY COUNT(*) DESC
+LIMIT 1;
 
 -- 55. MUESTRA LA DIRECCIÓN DE CADA TIENDA Y LA CANTIDAD DE USUARIOS INACTIVOS.
+SELECT
+    address.address as direccion,
+    COUNT(*) as usuarios_inactivos
+FROM address
+JOIN store ON address.address_id = store.address_id
+JOIN customer ON store.store_id = customer.store_id
+WHERE customer.active = 0
+GROUP BY store.store_id;
+
+
 -- 56. ¿CUÁNTOS USUARIOS SIN TELÉFONO TENEMOS?
--- 57. MUESTRA UN LISTADO DE LAS CATEGORÍAS Y CUÁNTO DINERO HEMOS GANADO CON CADA UNA DE ELLAS.
+SELECT
+    COUNT(*) as usuarios
+FROM customer c
+join address a on c.address_id = a.address_id
+WHERE a.phone IS NULL OR a.phone = '';
+
+
+-- 57. MUESTRA UN LISTADO DE LAS CATEGORÍAS Y 
+-- CUÁNTO DINERO HEMOS GANADO CON CADA UNA DE ELLAS.
+SELECT
+    c.name as categoria,
+    SUM(p.amount) as ganancias
+from category c
+JOIN film_category fc ON c.category_id = fc.category_id
+JOIN inventory i on fc.film_id = i.film_id
+JOIN rental r on i.inventory_id = r.inventory_id
+JOIN payment p on r.rental_id = p.rental_id
+GROUP BY c.category_id;
