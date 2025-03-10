@@ -36,28 +36,27 @@ ORDER BY month;
 
 -- 2. Salario medio de los managers de cada departamento.
 SELECT
-    EXTRACT(MONTH FROM salaries.from_date) as mes,
+    DATE_FORMAT(salaries.from_date, '%Y-%m') AS mes,
     ROUND(AVG(salaries.salary), 2) as salario_medio_managers,
     departments.dept_name as departamento
 FROM salaries
-RIGHT JOIN dept_manager ON salaries.emp_no = dept_manager.emp_no
-RIGHT JOIN departments ON dept_manager.dept_no = departments.dept_no
-WHERE salaries.from_date <= '2023-01-31' AND salaries.to_date >= '2022-02-01' 
-GROUP BY mes, EXTRACT(YEAR FROM salaries.from_date), departments.dept_no
-ORDER BY EXTRACT(YEAR FROM salaries.from_date) ASC, mes ASC;
+JOIN dept_manager ON salaries.emp_no = dept_manager.emp_no
+JOIN departments ON dept_manager.dept_no = departments.dept_no
+WHERE salaries.from_date BETWEEN DATE_SUB('1999-01-01', INTERVAL 12 MONTH) AND '1999-01-01'
+GROUP BY mes, departamento
+ORDER BY mes;
 
 -- CUSTOMER SERVICE
 SELECT
-    EXTRACT(MONTH FROM salaries.from_date) as mes,
+    DATE_FORMAT(salaries.from_date, '%Y-%m') as mes,
     ROUND(AVG(salaries.salary), 2) as salario_medio_managers
 FROM salaries
-LEFT JOIN dept_manager ON salaries.emp_no = dept_manager.emp_no
-LEFT JOIN departments ON dept_manager.dept_no = departments.dept_no 
+JOIN dept_manager ON salaries.emp_no = dept_manager.emp_no
+JOIN departments ON dept_manager.dept_no = departments.dept_no 
+WHERE salaries.from_date BETWEEN DATE_SUB('1999-01-01', INTERVAL 12 MONTH) AND '1999-01-01'
     AND departments.dept_name = 'Customer Service' 
-WHERE salaries.from_date <= '2023-01-31' 
-    AND salaries.to_date >= '2022-02-01'
-GROUP BY mes, EXTRACT(YEAR FROM salaries.from_date)
-ORDER BY EXTRACT(YEAR FROM salaries.from_date) ASC, mes ASC;
+GROUP BY mes
+ORDER BY mes;
 
 -- Customer Service
 -- Quality Management
