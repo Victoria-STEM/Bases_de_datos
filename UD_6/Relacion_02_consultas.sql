@@ -13,7 +13,7 @@ SELECT User, Host FROM mysql.user;
 GRANT SELECT, ON administracion_mysql.* TO 'analista'@'localhost';
 GRANT SELECT, INSERT ON administracion_mysql.ventas TO 'reportes'@'%';
 REVOKE INSERT ON administracion_mysql.ventas FROM 'reportes'@'%';
-SHOW GRANTS FOR 'reportes'@'%';
+SHOW GRANTS FOR 'analista'@'localhost';
 
 
 -- Crea un rol llamado gestor_ventas.
@@ -22,10 +22,9 @@ SHOW GRANTS FOR 'reportes'@'%';
 -- Verifica los roles asignados al usuario analista.
 CREATE ROLE 'gestor_ventas';
 GRANT SELECT, INSERT, UPDATE ON administracion_mysql.* TO 'gestor_ventas';
-FLUSH PRIVILEGES;
 GRANT 'gestor_ventas' TO 'analista'@'localhost';
 SELECT * FROM information_schema.applicable_roles WHERE grantee = 'analista'@'localhost';
-
+SHOW GRANTS FOR 'analista'@'localhost';
 
 -- Crea un índice en la columna producto de la tabla ventas.
 -- Crea un índice compuesto en las columnas nombre y email de la tabla usuarios.
@@ -33,7 +32,7 @@ SELECT * FROM information_schema.applicable_roles WHERE grantee = 'analista'@'lo
 -- Elimina el índice de producto en la tabla ventas.
 CREATE INDEX idx_producto ON administracion_mysql.ventas (producto);
 CREATE INDEX idx_nombre_email ON administracion_mysql.usuarios (nombre, email);
-SHOW PROFILES;
+SHOW INDEX FROM administracion_mysql.ventas;
 DROP INDEX idx_producto ON administracion_mysql;
 
 
@@ -51,3 +50,5 @@ DROP USER 'reportes'@'%';
 EXPLAIN SELECT * FROM ventas;
 CREATE INDEX idx_cantidad ON administracion_mysql.ventas (cantidad);
 EXPLAIN SELECT * FROM ventas;
+
+FLUSH PRIVILEGES;

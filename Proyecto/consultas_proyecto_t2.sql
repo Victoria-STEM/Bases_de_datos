@@ -35,6 +35,8 @@ ORDER BY month;
 
 
 -- 2. Salario medio de los managers de cada departamento.
+
+-- UNIFICADA
 SELECT
     DATE_FORMAT(salaries.from_date, '%Y-%m') AS mes,
     ROUND(AVG(salaries.salary), 2) as salario_medio_managers,
@@ -70,6 +72,19 @@ ORDER BY mes;
 
 
 -- 3. Salario medio de los empleados de cada departamento.
+-- UNIFICADA
+SELECT
+    DATE_FORMAT(s.from_date, '%Y-%m') as mes,
+    d.dept_name as departamento,
+    ROUND(AVG(s.salary), 2) as salario_medio_empleados
+FROM salaries s
+JOIN dept_emp de ON s.emp_no = de.emp_no
+JOIN departments d ON de.dept_no = d.dept_no
+WHERE s.from_date BETWEEN DATE_SUB('1999-01-01', INTERVAL 12 MONTH) AND '1999-01-01'
+GROUP BY mes, departamento
+ORDER BY d.dept_no ASC, mes ASC;
+
+-- CUSTOMER SERVICE
 SELECT
     EXTRACT(MONTH FROM salaries.from_date) as mes,
     ROUND(AVG(salaries.salary), 2) as salario_medio_empleados
