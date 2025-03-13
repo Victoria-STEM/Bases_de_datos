@@ -143,7 +143,7 @@ WHERE nombre = "Fernando";
 -- Las mesas 1 y 2 se usarán en el "Torneo de Verano".
 UPDATE mesa
 SET torneo_id = (SELECT torneo_id from torneo where nombre = "Torneo de Verano")
-WHERE id = 1 AND id = 2;
+WHERE identificador_mesa IN (1, 2);
 
 -- La mesa 3 se usará en la "Copa Nacional".
 UPDATE mesa
@@ -157,17 +157,19 @@ WHERE id = 4;
 
 -- CONDICIÓN: Asignar un torneo a todos los jugadores que no tengan torneo asignado aún.
 UPDATE jugador
-SET torneo_id = (SELECT torneo_id from torneo where nombre = "Desafío Internacional")
+SET torneo_id = (SELECT torneo_id from torneo order by Rand() limit 1) where nombre = "Desafío Internacional")
 WHERE torneo_id IS NULL;
 
 -- CONDICIÓN: Asignar un taco aleatorio a los jugadores que no tengan taco asignado.
 UPDATE jugador
-SET torneo_id = (SELECT torneo_id from torneo where nombre = "Desafío Internacional")
+SET torneo_id = (SELECT id from taco order by Rand() limit 1)
 WHERE torneo_id IS NULL;
 
 -- CONDICIÓN: Cambiar el torneo de todos los jugadores que actualmente participan en torneos 
 -- entre julio y noviembre.
-UPDATE 
+UPDATE jugador
+SET torneo_id = 1
+WHERE torneo_id IN (SELECT id FROM torneo where fecha > '2025-12-01')
 
 -- CONDICIÓN: Cambiar la mesa de todos los torneos que se celebren después del 1 de diciembre de 2025.
 
